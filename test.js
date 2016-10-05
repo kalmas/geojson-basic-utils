@@ -29,6 +29,7 @@ describe('#detectDupeCoords()', () => {
                     [-75.333333,40.333333],
                     [-75.444444,40.444444],
                     [-75.123456,40.123456], // Duplicate
+                    [-75.444444,40.444444],
                     [-75.111111,40.111111]
                 ]
             ]
@@ -36,8 +37,9 @@ describe('#detectDupeCoords()', () => {
 
         const result = utils.detectDupeCoords(makeFeature(geo));
 
-        result.should.have.lengthOf(1);
+        result.should.have.lengthOf(2);
         result[0].should.deep.equal([-75.123456,40.123456]);
+        result[1].should.deep.equal([-75.444444,40.444444]);
     });
 
     it('should detect duplicate coordinates on MultiPolygon', () => {
@@ -48,6 +50,7 @@ describe('#detectDupeCoords()', () => {
                     [
                         [-75.111111,40.111111],
                         [-75.222222,40.222222],
+                        [-75.222222,40.222222], // Duplicate
                         [-75.111111,40.111111]
                     ],
                     [
@@ -71,8 +74,9 @@ describe('#detectDupeCoords()', () => {
 
         const result = utils.detectDupeCoords(makeFeature(geo));
 
-        result.should.have.lengthOf(1);
-        result[0].should.deep.equal([-75.123456,40.123456]);
+        result.should.have.lengthOf(2);
+        result[0].should.deep.equal([-75.222222,40.222222]);
+        result[1].should.deep.equal([-75.123456,40.123456]);
     });
 
     it('should return false if no duplicates', () => {
