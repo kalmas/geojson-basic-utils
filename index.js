@@ -43,7 +43,7 @@ const detectDuplicatesOnPolygon = (polygon) => {
     return dupesOnPolygon;
 };
 
-module.exports.detectDupeCoords = (geoJsonFeature) => {
+const detectDupeCoords = (geoJsonFeature) => {
 
     if (typeof geoJsonFeature == 'string') {
         geoJsonFeature = JSON.parse(geoJsonFeature);
@@ -74,7 +74,7 @@ module.exports.detectDupeCoords = (geoJsonFeature) => {
 };
 
 
-module.exports.removeDupeCoords = (geoJsonFeature) => {
+const removeDupeCoords = (geoJsonFeature) => {
 
     if (typeof geoJsonFeature == 'object') {
         geoJsonFeature = JSON.stringify(geoJsonFeature);
@@ -101,3 +101,23 @@ module.exports.removeDupeCoords = (geoJsonFeature) => {
 
     return cleaned;
 };
+
+const detectAndRemoveDupeCoords = (geoJsonFeature, logFunction) => {
+    const dupes = detectDupeCoords(geoJsonFeature);
+    if (dupes) {
+        if (typeof logFunction == 'function') {
+            logFunction(`Attempting to remove dupe coordinates.\n` +
+            `   ${JSON.stringify(dupes)}`);
+        }
+
+        return removeDupeCoords(geoJsonFeature);
+    }
+
+    return geoJsonFeature;
+}
+
+
+
+module.exports.detectDupeCoords = detectDupeCoords;
+module.exports.detectAndRemoveDupeCoords = detectAndRemoveDupeCoords;
+module.exports.removeDupeCoords = removeDupeCoords;
