@@ -5,7 +5,7 @@
   "repository": "https://github.com/kalmas/geojson-util",
   "main": "index.js",
   "scripts": {
-    "test": "test.js"
+    "test": "mocha"
   },
   "author": "kalmas",
   "license": "ISC",

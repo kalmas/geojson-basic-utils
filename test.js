@@ -11,7 +11,125 @@ function makeFeature(geometry) {
     }
 }
 
-describe('#removeDuplicateCoordinates()', () => {
+describe('#detectDupeCoords()', () => {
+
+    it('should detect duplicate coordinates on Polygon', () => {
+        const geo = {
+            type: "Polygon",
+            coordinates: [
+                [
+                    [-75.111111,40.111111],
+                    [-75.123456,40.123456],
+                    [-75.111111,40.111111],
+                ],
+                [
+                    [-75.111111,40.111111],
+                    [-75.123456,40.123456],
+                    [-75.222222,40.222222],
+                    [-75.333333,40.333333],
+                    [-75.444444,40.444444],
+                    [-75.123456,40.123456], // Duplicate
+                    [-75.111111,40.111111]
+                ]
+            ]
+        };
+
+        const result = utils.detectDupeCoords(makeFeature(geo));
+
+        result.should.have.lengthOf(1);
+        result[0].should.deep.equal([-75.123456,40.123456]);
+    });
+
+    it('should detect duplicate coordinates on MultiPolygon', () => {
+        const geo = {
+            type: "MultiPolygon",
+            coordinates: [
+                [
+                    [
+                        [-75.111111,40.111111],
+                        [-75.222222,40.222222],
+                        [-75.111111,40.111111]
+                    ],
+                    [
+                        [-75.111111,40.111111],
+                        [-75.123456,40.123456],
+                        [-75.222222,40.222222],
+                        [-75.333333,40.333333],
+                        [-75.444444,40.444444],
+                        [-75.123456,40.123456], // Duplicate
+                        [-75.111111,40.111111]
+                    ],
+                    [
+                        [-75.111111,40.111111],
+                        [-75.222222,40.222222],
+                        [-75.333333,40.333333],
+                        [-75.111111,40.111111]
+                    ]
+                ]
+            ]
+        }
+
+        const result = utils.detectDupeCoords(makeFeature(geo));
+
+        result.should.have.lengthOf(1);
+        result[0].should.deep.equal([-75.123456,40.123456]);
+    });
+
+    it('should return false if no duplicates', () => {
+        const geo = {
+            type: "Polygon",
+            coordinates: [
+                [
+                    [-75.111111,40.111111],
+                    [-75.123456,40.123456],
+                    [-75.111111,40.111111],
+                ],
+                [
+                    [-75.111111,40.111111],
+                    [-75.123456,40.123456],
+                    [-75.222222,40.222222],
+                    [-75.333333,40.333333],
+                    [-75.444444,40.444444],
+                    [-75.111111,40.111111]
+                ]
+            ]
+        };
+
+        const result = utils.detectDupeCoords(makeFeature(geo));
+
+        result.should.be.false;
+    });
+
+
+    it('should detect multiple duplicates', () => {
+        const geo = {
+            type: "Polygon",
+            coordinates: [
+                [
+                    [-75.111111,40.111111],
+                    [-75.222222,40.222222],
+                    [-75.333333,40.333333],
+                    [-75.111111,40.111111],
+                    [-75.444444,40.444444],
+                    [-75.333333,40.333333],
+                    [-75.111111,40.111111]
+                ]
+            ]
+        };
+
+        const result = utils.detectDupeCoords(makeFeature(geo));
+
+        result.should.have.lengthOf(2);
+        result[0].should.deep.equal([-75.111111,40.111111]);
+        result[1].should.deep.equal([-75.333333,40.333333]);
+    });
+});
+
+
+
+
+
+describe('#removeDupeCoords()', () => {
 
     it('should remove duplicate coordinate from Polygon', () => {
         const geo = {
@@ -29,7 +147,7 @@ describe('#removeDuplicateCoordinates()', () => {
             ]
         };
 
-        const result = utils.removeDuplicateCoordinates(makeFeature(geo));
+        const result = utils.removeDupeCoords(makeFeature(geo));
 
         // Should have duplicate removed
         result.geometry.coordinates[0].should.have.lengthOf(6);
@@ -58,7 +176,7 @@ describe('#removeDuplicateCoordinates()', () => {
             ]
         };
 
-        const result = utils.removeDuplicateCoordinates(makeFeature(geo));
+        const result = utils.removeDupeCoords(makeFeature(geo));
 
         // Should have duplicate removed
         result.geometry.coordinates[0].should.have.lengthOf(5);
@@ -99,7 +217,7 @@ describe('#removeDuplicateCoordinates()', () => {
             ]
         };
 
-        const result = utils.removeDuplicateCoordinates(makeFeature(geo));
+        const result = utils.removeDupeCoords(makeFeature(geo));
 
         // Should be unmodified
         result.geometry.coordinates[0][0].should.have.lengthOf(3);
