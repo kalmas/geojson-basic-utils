@@ -111,5 +111,3 @@ exports.detectAndRemoveDupeCoords = (geoJsonFeature, logFunction) => {
 
     return geoJsonFeature;
 };
-
-

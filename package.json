@@ -1,13 +1,13 @@
 {
-  "name": "geojson-utils",
+  "name": "geojson-basic-utils",
   "version": "0.0.1",
-  "description": "Simple GeoJSON Utility Belt",
+  "description": "Basic GeoJSON Utility Belt",
   "repository": "https://github.com/kalmas/geojson-util",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
-  "author": "kalmas",
+  "author": "kalmas <kylealmas@gmail.com.com> (http://kalmas.net)",
   "license": "ISC",
   "devDependencies": {
     "chai": "^3.5.0",
