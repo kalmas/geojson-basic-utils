@@ -2,7 +2,7 @@
   "name": "geojson-basic-utils",
   "version": "0.0.1",
   "description": "Basic GeoJSON Utility Belt",
-  "repository": "https://github.com/kalmas/geojson-util",
+  "repository": "https://github.com/kalmas/geojson-basic-utils",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
