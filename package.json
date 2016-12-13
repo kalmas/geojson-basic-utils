@@ -7,7 +7,7 @@
   "scripts": {
     "test": "mocha"
   },
-  "author": "kalmas <kylealmas@gmail.com.com> (http://kalmas.net)",
+  "author": "kalmas <kylealmas@gmail.com> (http://kalmas.net)",
   "license": "ISC",
   "devDependencies": {
     "chai": "^3.5.0",
