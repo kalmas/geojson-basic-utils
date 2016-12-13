@@ -1,3 +1,5 @@
+/*global describe*/
+/*global it*/
 const chai = require('chai');
 const utils = require('./index');
 
@@ -5,17 +7,17 @@ chai.should();
 
 function makeFeature(geometry) {
     return {
-        type:"Feature",
+        type: 'Feature',
         properties: {},
         geometry: geometry
-    }
+    };
 }
 
 describe('#detectDupeCoords()', () => {
 
     it('should detect duplicate coordinates on Polygon', () => {
         const geo = {
-            type: "Polygon",
+            type: 'Polygon',
             coordinates: [
                 [
                     [-75.111111,40.111111],
@@ -44,7 +46,7 @@ describe('#detectDupeCoords()', () => {
 
     it('should detect duplicate coordinates on MultiPolygon', () => {
         const geo = {
-            type: "MultiPolygon",
+            type: 'MultiPolygon',
             coordinates: [
                 [
                     [
@@ -70,7 +72,7 @@ describe('#detectDupeCoords()', () => {
                     ]
                 ]
             ]
-        }
+        };
 
         const result = utils.detectDupeCoords(makeFeature(geo));
 
@@ -81,7 +83,7 @@ describe('#detectDupeCoords()', () => {
 
     it('should return false if no duplicates', () => {
         const geo = {
-            type: "Polygon",
+            type: 'Polygon',
             coordinates: [
                 [
                     [-75.111111,40.111111],
@@ -107,7 +109,7 @@ describe('#detectDupeCoords()', () => {
 
     it('should detect multiple duplicates', () => {
         const geo = {
-            type: "Polygon",
+            type: 'Polygon',
             coordinates: [
                 [
                     [-75.111111,40.111111],
@@ -137,7 +139,7 @@ describe('#removeDupeCoords()', () => {
 
     it('should remove duplicate coordinate from Polygon', () => {
         const geo = {
-            type: "Polygon",
+            type: 'Polygon',
             coordinates: [
                 [
                     [-75.111111,40.111111],
@@ -166,7 +168,7 @@ describe('#removeDupeCoords()', () => {
 
     it('should remove multiple duplicate coordinates from Polygon', () => {
         const geo = {
-            type: "Polygon",
+            type: 'Polygon',
             coordinates: [
                 [
                     [-75.111111,40.111111],
@@ -194,7 +196,7 @@ describe('#removeDupeCoords()', () => {
 
     it('should remove duplicate coordinate from MultiPolygon', () => {
         const geo = {
-            type: "MultiPolygon",
+            type: 'MultiPolygon',
             coordinates: [
                 [
                     [

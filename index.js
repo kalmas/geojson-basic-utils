@@ -1,4 +1,6 @@
-const removeDuplicatesFromPolygon = (polygon) => {
+const private = {};
+
+private.removeDuplicatesFromPolygon = (polygon) => {
 
     const cleanPolygon = [];
     polygon.forEach(ring => {
@@ -21,7 +23,7 @@ const removeDuplicatesFromPolygon = (polygon) => {
     return cleanPolygon;
 };
 
-const detectDuplicatesOnPolygon = (polygon) => {
+private.detectDuplicatesOnPolygon = (polygon) => {
 
     const dupesOnPolygon = [];
     polygon.forEach(ring => {
@@ -43,7 +45,7 @@ const detectDuplicatesOnPolygon = (polygon) => {
     return dupesOnPolygon;
 };
 
-const detectDupeCoords = (geoJsonFeature) => {
+exports.detectDupeCoords = (geoJsonFeature) => {
 
     if (typeof geoJsonFeature == 'string') {
         geoJsonFeature = JSON.parse(geoJsonFeature);
@@ -54,16 +56,13 @@ const detectDupeCoords = (geoJsonFeature) => {
     if (geoJsonFeature.geometry.type == 'MultiPolygon') {
 
         geoJsonFeature.geometry.coordinates.forEach((polygon) => {
-            const dupesOnPolygon = detectDuplicatesOnPolygon(polygon);
+            const dupesOnPolygon = private.detectDuplicatesOnPolygon(polygon);
             dupeCoords = dupeCoords.concat(dupesOnPolygon);
         });
     } else if (geoJsonFeature.geometry.type == 'Polygon') {
 
-        const dupesOnPolygon = detectDuplicatesOnPolygon(geoJsonFeature.geometry.coordinates);
+        const dupesOnPolygon = private.detectDuplicatesOnPolygon(geoJsonFeature.geometry.coordinates);
         dupeCoords = dupesOnPolygon;
-    } else {
-
-        throw new Error(`Feature type ${geoJsonFeature.geometry.type} not supported.`);
     }
 
     if (dupeCoords.length) {
@@ -74,7 +73,7 @@ const detectDupeCoords = (geoJsonFeature) => {
 };
 
 
-const removeDupeCoords = (geoJsonFeature) => {
+exports.removeDupeCoords = (geoJsonFeature) => {
 
     if (typeof geoJsonFeature == 'object') {
         geoJsonFeature = JSON.stringify(geoJsonFeature);
@@ -86,38 +85,31 @@ const removeDupeCoords = (geoJsonFeature) => {
 
         const cleanedPolygons = [];
         cleaned.geometry.coordinates.forEach((polygon) => {
-            cleanedPolygons.push(removeDuplicatesFromPolygon(polygon));
+            cleanedPolygons.push(private.removeDuplicatesFromPolygon(polygon));
         });
 
         cleaned.geometry.coordinates = cleanedPolygons;
     } else if (cleaned.geometry.type == 'Polygon') {
 
-        const cleanedPolygon = removeDuplicatesFromPolygon(cleaned.geometry.coordinates);
+        const cleanedPolygon = private.removeDuplicatesFromPolygon(cleaned.geometry.coordinates);
         cleaned.geometry.coordinates = cleanedPolygon;
-    } else {
-
-        throw new Error(`Feature type ${cleaned.geometry.type} not supported.`);
     }
 
     return cleaned;
 };
 
-const detectAndRemoveDupeCoords = (geoJsonFeature, logFunction) => {
-    const dupes = detectDupeCoords(geoJsonFeature);
+exports.detectAndRemoveDupeCoords = (geoJsonFeature, logFunction) => {
+    const dupes = exports.detectDupeCoords(geoJsonFeature);
     if (dupes) {
         if (typeof logFunction == 'function') {
             logFunction(`Attempting to remove dupe coordinates.\n` +
             `   ${JSON.stringify(dupes)}`);
         }
 
-        return removeDupeCoords(geoJsonFeature);
+        return exports.removeDupeCoords(geoJsonFeature);
     }
 
     return geoJsonFeature;
-}
+};
 
 
-
-module.exports.detectDupeCoords = detectDupeCoords;
-module.exports.detectAndRemoveDupeCoords = detectAndRemoveDupeCoords;
-module.exports.removeDupeCoords = removeDupeCoords;
