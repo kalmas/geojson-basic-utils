@@ -1,6 +1,6 @@
 {
   "name": "geojson-utils",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Simple GeoJSON Utility Belt",
   "repository": "https://github.com/kalmas/geojson-util",
   "main": "index.js",
